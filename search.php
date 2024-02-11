@@ -49,7 +49,7 @@
         
             $_SESSION['lookups'] += $result->num_rows;
             updateRecord($conn, 'users', 'lookups', $_SESSION['lookups'], 'authkey', $_SESSION['authkey']);
-
+ 
             $logsData = [
                 'user' => $_SESSION['username'],
                 'value' => $search_key,
