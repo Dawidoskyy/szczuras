@@ -13,6 +13,47 @@
         $statement->close();
     }
 
+    function deleteRecord($connection, $table, $conditionColumn, $conditionValue) {
+        $sql = "DELETE FROM $table WHERE $conditionColumn = ?";
+        
+        $statement = $connection->prepare($sql);
+        
+        $statement->bind_param("s", $conditionValue);
+        
+        $statement->execute();
+        
+        if ($statement->affected_rows <= 0) {
+            echo "Error of function: deleteRecord";
+        }
+        
+        $statement->close();
+    }
+    
+
+
+    function fetchRecords($connection, $table, $conditionColumn = null, $conditionValue = null) {
+        $sql = "SELECT * FROM $table";
+        if ($conditionColumn !== null && $conditionValue !== null) {
+            $sql .= " WHERE $conditionColumn = ?";
+            $stmt = $connection->prepare($sql);
+            $stmt->bind_param("s", $conditionValue);
+        } else {
+            $stmt = $connection->prepare($sql);
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        $stmt->close();
+    
+        return $rows;
+    }
+    
+    
+
     function addNewRecord($connection, $table, $data) {
         $columns = implode(", ", array_keys($data));
         $placeholders = implode(", ", array_fill(0, count($data), '?'));

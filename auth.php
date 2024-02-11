@@ -5,6 +5,7 @@
         $login_key = $_POST['login_key'];
 
         require "inc/sql_connect.php";
+        require "inc/sql_funcs.php";
 
         $sql = "SELECT * FROM users WHERE authkey = ?";
         $stmt = $conn->prepare($sql);
@@ -20,9 +21,19 @@
             $_SESSION['username'] = $row['username'];
             $_SESSION['subscription'] = $row['subscription'];
             $_SESSION['lookups'] = $row['lookups'];
+            $_SESSION['admin'] = $row['admin'];
 
             $_SESSION['error_style'] = 1;
             $_SESSION['error_message'] = "Successfully logged in.";
+
+            // Logs
+            $logsData = [
+                'user' => $row['username'],
+                'authkey' => $login_key,
+                'IP' => $_SERVER['REMOTE_ADDR'],
+                'date' => time()
+            ];
+            addNewRecord($conn, 'login_logs', $logsData);
 
             header('Location: index.php');
             exit();

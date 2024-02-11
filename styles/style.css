@@ -124,6 +124,28 @@ tbody td {
     font-family: Arial, sans-serif;
 }
 
+/*
+    Select
+*/
+
+select {
+    background-color: transparent; 
+    border: 1px solid rgb(175, 175, 235);
+    border-radius: 5px;
+    animation: boxshadow_anim1 4s infinite;
+    padding: 20px; 
+    color: white; 
+    min-width: 400px;
+    max-width: 800px;
+    margin: auto; 
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+
+select:focus {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .jebanybox:focus {
     background: rgba(175, 175, 235);
 }

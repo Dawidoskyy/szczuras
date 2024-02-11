@@ -4,8 +4,9 @@
     if (isset($_SESSION['authkey'])) {
         unset($_SESSION['authkey']);
         unset($_SESSION['username']);
-
-        $_SESSION['username'] = $row['username'];
+        unset($_SESSION['admin']);
+        unset($_SESSION['subscription']);
+        unset($_SESSION['lookups']);
 
         $_SESSION['error_style'] = 1;
         $_SESSION['error_message'] = "Successfully logged out.";

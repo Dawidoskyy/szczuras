@@ -1,13 +1,28 @@
 <?php
     session_start();
 
+    require "inc/sql_connect.php";
+    require "inc/sql_funcs.php";
+
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
-        // Zrobiæ tutaj jeszcze sprawdzanie czy jest zalogowany i ma suba
+        // Sprawddzanie czy ma suba
+        if(time() > $_SESSION['subscription']) {
+            $_SESSION['error_style'] = 0;
+            $_SESSION['error_message'] = "Subscription error";
+            header('Location: index.php');
+            exit();
+        }
 
         $search_key = $_POST['search_user'];
 
-        require "inc/sql_connect.php";
-        require "inc/sql_funcs.php";
+        // Sprawdza kurwa blackliste
+        $blacklistedUsers = fetchRecords($conn, "blacklist", "name", $search_key);
+        if (!empty($blacklistedUsers)) {
+            $_SESSION['error_style'] = 0;
+            $_SESSION['error_message'] = "User is blacklisted.";
+            header('Location: index.php');
+            exit();
+        }
 
         $sql = "SELECT * FROM ipki WHERE nickname = ?";
         $stmt = $conn->prepare($sql);
