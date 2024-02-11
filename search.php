@@ -4,6 +4,15 @@
     require "inc/sql_connect.php";
     require "inc/sql_funcs.php";
 
+    if($_SESSION['lastaction'] + 3 > time()) {
+        $_SESSION['error_style'] = 0;
+        $_SESSION['error_message'] = "Too many requests to api. Try again later.";
+        header('Location: index.php');
+        exit();
+    }
+
+    $_SESSION['lastaction'] = time();
+
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
         // Sprawddzanie czy ma suba
         if(time() > $_SESSION['subscription']) {

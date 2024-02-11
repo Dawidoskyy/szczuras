@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-    <h1 class="jebanelogo">Admin panel</h1><br><br><br>
+    <h1 class="jebanelogo" onclick="window.location.href='index.php';" style="cursor: pointer;">Admin panel</h1><br><br><br>
 
     <?php display_error(); ?>
 
