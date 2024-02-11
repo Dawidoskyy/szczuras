@@ -77,13 +77,13 @@ tbody td {
 
 @keyframes boxshadow_anim1 {
     0% {
-      box-shadow: 0 0 10px rgb(175, 175, 235, 0.3);
+      box-shadow: 0 0 10px rgb(175, 175, 235, 0.2);
     }
     50% {
-      box-shadow: 0 0 20px rgb(119, 119, 161, 0.3);
+      box-shadow: 0 0 20px rgb(119, 119, 161, 0.2);
     }
     100% {
-      box-shadow: 0 0 10px rgb(175, 175, 235, 0.3);
+      box-shadow: 0 0 10px rgb(175, 175, 235, 0.2);
     }
 }
 

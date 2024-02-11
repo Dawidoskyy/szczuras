@@ -42,7 +42,7 @@
                 $timeRemaining = $interval->format('%a days');
             }
         
-            $subscription = "Expires " . $timeRemaining;
+            $subscription = "Expires in " . $timeRemaining;
         }        
 
         echo '<center style="color: rgb(255, 255, 255, 0.7);">
