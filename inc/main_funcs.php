@@ -15,10 +15,10 @@
             <center><h1 style="color: rgb(255, 255, 255, 0.7);">Price list:</h1></center>
             <ul>
                 <li>
-                    30 days: 30pln
+                    30 days: 35pln
                 </li>
                 <li>
-                    Lifetime: 50pln
+                    Lifetime: 45pln
                 </li>
                 <li>
                     Delete from database: 20pln
