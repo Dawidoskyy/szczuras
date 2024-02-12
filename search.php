@@ -33,55 +33,106 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
         exit();
     }
 
-    $sql = "SELECT * FROM ipki WHERE nickname = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $search_key);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Bierze kurwa jebane uuid
+    $mojang_api_url = "https://api.mojang.com/users/profiles/minecraft/" . urlencode($search_key);
+    $mojang_response = file_get_contents($mojang_api_url);
 
-    if ($result->num_rows > 0) {
-        $_SESSION['modal_message'] = "<center><h1 class='jebanelogo' style='font-size: 35px;'>User found!</h1><br>
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>IP</th>
-                <th>From</th>
-                <th></th>
-            </tr>";
-
-            while ($row = $result->fetch_assoc()) {
-                $_SESSION['modal_message'] .= "<tr>
-                    <td>" . $row['nickname'] . "</td>
-                    <td>" . $row['ip'] . "</td>
-                    <td>" . $row['fromwhere'] . "</td>
-                    <td><button class='chujowyprzycisk' onclick=\"var textarea = document.createElement('textarea');textarea.value = '" . $row['ip'] . "';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);\">Copy IP</button></td>
-                </tr>";
-            }
-            
-            
-
-        $_SESSION['lookups'] += $result->num_rows;
-        updateRecord($conn, 'users', 'lookups', $_SESSION['lookups'], 'authkey', $_SESSION['authkey']);
-
-        $logsData = [
-            'user' => $_SESSION['username'],
-            'value' => $search_key,
-            'date' => time(),
-            'status' => 1
-        ];
-        addNewRecord($conn, 'search_logs', $logsData);
-    } else {
-        $logsData = [
-            'user' => $_SESSION['username'],
-            'value' => $search_key,
-            'date' => time(),
-            'status' => 0
-        ];
-        addNewRecord($conn, 'search_logs', $logsData);
-
+    if ($mojang_response === false) {
         $_SESSION['error_style'] = 0;
-        $_SESSION['error_message'] = "User not found!";
-        unset($_SESSION['search_user']);
+        $_SESSION['error_message'] = "Error retrieving data from API (Error 101).";
+        header('Location: index.php');
+        exit();
+    }
+
+    $mojang_data = json_decode($mojang_response, true);
+
+    // Sprawdza pierdolone stare nicki
+    if ($mojang_data !== null && isset($mojang_data['id'])) {
+        $player_id = $mojang_data['id'];
+        $labymod_api_url = "https://laby.net/api/v2/user/$player_id/get-profile";
+        $labymod_response = file_get_contents($labymod_api_url);
+
+        if ($labymod_response === false) {
+            $_SESSION['error_style'] = 0;
+            $_SESSION['error_message'] = "Error retrieving data from API (Error 102).";
+            header('Location: index.php');
+            exit();
+        }
+
+        $labymod_data = json_decode($labymod_response, true);
+
+        if ($labymod_data !== null && isset($labymod_data['username_history'])) {
+            $history = $labymod_data['username_history'];
+            
+            // Szuka WSZYSTKO KURWA
+            $history[] = array('username' => $search_key);
+
+            // Przechowuje slup jebany +18
+            $search_results = [];
+
+            // Szuka
+            foreach ($history as $entry) {
+                $old_username = $entry['username'];
+                
+                $sql = "SELECT * FROM ipki WHERE nickname = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $old_username);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    // Jak znajdzie to dodaje nie do slupa jebanego xdd
+                    while ($row = $result->fetch_assoc()) {
+                        $search_results[] = $row;
+                    }
+                }
+            }
+
+            if (!empty($search_results)) {
+                $_SESSION['modal_message'] = "<center><h1 class='jebanelogo' style='font-size: 35px;'>User found!</h1><br>
+                <table>
+                    <tr>
+                        <th>Username</th>
+                        <th>IP</th>
+                        <th>From</th>
+                        <th></th>
+                    </tr>";
+
+                foreach ($search_results as $row) {
+                    $_SESSION['modal_message'] .= "<tr>
+                            <td>" . $row['nickname'] . "</td>
+                            <td>" . $row['ip'] . "</td>
+                            <td>" . $row['fromwhere'] . "</td>
+                            <td><button class='chujowyprzycisk' onclick=\"var textarea = document.createElement('textarea');textarea.value = '" . $row['ip'] . "';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);\">Copy IP</button></td>
+                        </tr>";
+                }
+
+                $_SESSION['lookups'] += count($search_results);
+                updateRecord($conn, 'users', 'lookups', $_SESSION['lookups'], 'authkey', $_SESSION['authkey']);
+
+                $logsData = [
+                    'user' => $_SESSION['username'],
+                    'value' => $search_key,
+                    'date' => time(),
+                    'status' => 1
+                ];
+                addNewRecord($conn, 'search_logs', $logsData);
+            } else {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "User not found!";
+                unset($_SESSION['search_user']);
+            }
+        } else {
+            $_SESSION['error_style'] = 0;
+            $_SESSION['error_message'] = "No username history found for this user.";
+            header('Location: index.php');
+            exit();
+        }
+    } else {
+        $_SESSION['error_style'] = 0;
+        $_SESSION['error_message'] = "No user found with this username.";
+        header('Location: index.php');
+        exit();
     }
 
     header('Location: index.php');
