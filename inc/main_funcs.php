@@ -73,7 +73,7 @@
 
     function display_error()
     {
-        $type = $_SESSION['error_style'];
+        $type = isset($_SESSION['error_style']) ? $_SESSION['error_style'] : 0;
         if (isset($_SESSION['error_message'])) {
             if($type == 0) {
                 echo "<div class='jebanybox' style='border: 1px solid rgba(255, 0, 0); background: rgba(255, 0, 0, 0.1)'>" . $_SESSION['error_message'] . "</div><br>";
@@ -83,6 +83,7 @@
             unset($_SESSION['error_message']);
         }
     }
+
 
     function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=></?';
