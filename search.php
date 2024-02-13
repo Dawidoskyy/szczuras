@@ -40,38 +40,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $_SESSION['modal_message'] = "<center><h1 class='jebanelogo' style='font-size: 35px;'>User found!</h1><br>";
+        $_SESSION['modal_message'] = "<center><h1 class='jebanelogo' style='font-size: 35px;'>User found!</h1><br>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>IP</th>
+                <th>From</th>
+                <th></th>
+            </tr>";
 
-        while ($row = $result->fetch_assoc()) {
-            // Dodajemy obrazek do modal_message
-            $_SESSION['modal_message'] .= "<center><img src='https://minotar.net/avatar/" . $row['nickname'] . "/128.png' alt='User Avatar'></center>";
-
-            // Dodajemy dane do tabeli
-            $_SESSION['modal_message'] .= "<table>
-                <tr>
-                    <th>Username</th>
-                    <th>IP</th>
-                    <th>From</th>
-                    <th></th>
-                </tr>
-                <tr>
+            while ($row = $result->fetch_assoc()) {
+                $_SESSION['modal_message'] .= "<tr>
                     <td>" . $row['nickname'] . "</td>
                     <td>" . $row['ip'] . "</td>
                     <td>" . $row['fromwhere'] . "</td>
                     <td><button class='chujowyprzycisk' onclick=\"var textarea = document.createElement('textarea');textarea.value = '" . $row['ip'] . "';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);\">Copy IP</button></td>
                 </tr>";
+            }
+            
+            
 
-            $_SESSION['lookups'] += $result->num_rows;
-            updateRecord($conn, 'users', 'lookups', $_SESSION['lookups'], 'authkey', $_SESSION['authkey']);
+        $_SESSION['lookups'] += $result->num_rows;
+        updateRecord($conn, 'users', 'lookups', $_SESSION['lookups'], 'authkey', $_SESSION['authkey']);
 
-            $logsData = [
-                'user' => $_SESSION['username'],
-                'value' => $search_key,
-                'date' => time(),
-                'status' => 1
-            ];
-            addNewRecord($conn, 'search_logs', $logsData);
-        }
+        $logsData = [
+            'user' => $_SESSION['username'],
+            'value' => $search_key,
+            'date' => time(),
+            'status' => 1
+        ];
+        addNewRecord($conn, 'search_logs', $logsData);
     } else {
         $logsData = [
             'user' => $_SESSION['username'],
