@@ -30,7 +30,7 @@
     function show_user_info()
     {
         $subscription = "None";
-        $now = new DateTime(); // Current date and time
+        $now = new DateTime();
         if(isset($_SESSION['subscription']) && $_SESSION['subscription'] > $now->getTimestamp()) {
             $subscriptionEndDate = new DateTime();
             $subscriptionEndDate->setTimestamp($_SESSION['subscription']); 

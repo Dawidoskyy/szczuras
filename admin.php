@@ -19,6 +19,7 @@
     <style>
         .hidden { display: none; }
     </style>
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/1084181053687746620/1207078195694931979/LnBuZw.png?ex=65de562c&is=65cbe12c&hm=35597e7e27833b4e3c4db3bbab8493d411785354aafa424ef8e4a5adaf129ab4&" type="image/png">
 </head>
 <body>
     <h1 class="jebanelogo" onclick="window.location.href='index.php';" style="cursor: pointer;">Admin panel</h1><br><br><br>
