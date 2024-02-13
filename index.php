@@ -61,21 +61,26 @@
 
 <script>
     var modal = document.getElementById("myModal");
-    var btn = document.getElementsByTagName("button")[0];
     var closeBtn = document.getElementsByClassName("close")[0];
 
     function closeModal() {
-        modal.style.display = "none";
+        var opacity = 1;
+        var timer = setInterval(function() {
+            if(opacity <= 0) {
+                clearInterval(timer);
+                modal.style.display = "none";
+            }
+            modal.style.opacity = opacity;
+            modal.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+            opacity -= 0.1;
+        }, 50);
     }
-    closeBtn.onclick = closeModal;
 
-    function openModal() {
-        modal.style.display = "block";
-    }
+    closeBtn.onclick = closeModal;
 
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            closeModal();
         }
     }
 </script>
