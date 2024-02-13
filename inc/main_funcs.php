@@ -58,7 +58,7 @@
         echo '
             <form action="./search.php" method="post">
                 <label for="search_user" style="float: left;">Search user: <span style="color: red">*</span></label><br>
-                <input type="text" id="search_user" name="search_user" style="width: 90%;"><br><br>
+                <input type="text" id="search_user" name="search_user" autocomplete="off" style="width: 90%;"><br><br>
                 <center>
                     <button type="submit" class="chujowyprzycisk"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                 </center>
