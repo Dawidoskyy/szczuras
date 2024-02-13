@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_key'])) {
         $_SESSION['lookups'] = $row['lookups'];
         $_SESSION['admin'] = $row['admin'];
 
-        setcookie("login_key", $login_key, time() + 3600, "/");
+        setcookie("login_key", $login_key, time() + 604800, "/");
 
         $_SESSION['lastaction'] = time();
 
