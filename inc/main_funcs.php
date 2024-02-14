@@ -4,7 +4,7 @@
         echo '
         <form action="./auth.php" method="post">
             <label for="login_key" style="float: left;">Enter key: <span style="color: red">*</span></label><br>
-            <input type="text" id="login_key" name="login_key" style="width: 90%;"><br><br>
+            <input type="text" id="login_key" autocomplete="off" name="login_key" style="width: 90%;"><br><br>
             <center><input type="submit" value="Submit" class="chujowyprzycisk"></center>
         </form>';
     }
@@ -15,10 +15,10 @@
             <center><h1 style="color: rgb(255, 255, 255, 0.7);">Price list:</h1></center>
             <ul>
                 <li>
-                    30 days: 30pln
+                    30 days: 35pln
                 </li>
                 <li>
-                    Lifetime: 50pln
+                    Lifetime: 45pln
                 </li>
                 <li>
                     Delete from database: 20pln
@@ -58,7 +58,7 @@
         echo '
             <form action="./search.php" method="post">
                 <label for="search_user" style="float: left;">Search user: <span style="color: red">*</span></label><br>
-                <input type="text" id="search_user" name="search_user" style="width: 90%;"><br><br>
+                <input type="text" id="search_user" name="search_user" autocomplete="off" style="width: 90%;"><br><br>
                 <center>
                     <button type="submit" class="chujowyprzycisk"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                 </center>
@@ -73,7 +73,7 @@
 
     function display_error()
     {
-        $type = $_SESSION['error_style'];
+        $type = isset($_SESSION['error_style']) ? $_SESSION['error_style'] : 0;
         if (isset($_SESSION['error_message'])) {
             if($type == 0) {
                 echo "<div class='jebanybox' style='border: 1px solid rgba(255, 0, 0); background: rgba(255, 0, 0, 0.1)'>" . $_SESSION['error_message'] . "</div><br>";
@@ -83,6 +83,7 @@
             unset($_SESSION['error_message']);
         }
     }
+
 
     function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=></?';

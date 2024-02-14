@@ -11,10 +11,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css">
         <link rel="stylesheet" href="styles/style.css">
-        <title>Gicik.xyz</title>
+        <title>gicik.xyz</title>
+        <link rel="icon" href="https://cdn.discordapp.com/attachments/1084181053687746620/1207078195694931979/LnBuZw.png?ex=65de562c&is=65cbe12c&hm=35597e7e27833b4e3c4db3bbab8493d411785354aafa424ef8e4a5adaf129ab4&" type="image/png">
     </head>
     <body>
-        <h1 class="jebanelogo" onclick="window.location.href='index.php';" style="cursor: pointer;">Gicik.xyz</h1><br><br><br>
+        <h1 class="jebanelogo" onclick="window.location.href='index.php';" style="cursor: pointer;">gicik.xyz</h1><br><br><br>
 
         <?php display_error(); ?>
 
@@ -60,21 +61,26 @@
 
 <script>
     var modal = document.getElementById("myModal");
-    var btn = document.getElementsByTagName("button")[0];
     var closeBtn = document.getElementsByClassName("close")[0];
 
     function closeModal() {
-        modal.style.display = "none";
+        var opacity = 1;
+        var timer = setInterval(function() {
+            if(opacity <= 0) {
+                clearInterval(timer);
+                modal.style.display = "none";
+            }
+            modal.style.opacity = opacity;
+            modal.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+            opacity -= 0.1;
+        }, 50);
     }
-    closeBtn.onclick = closeModal;
 
-    function openModal() {
-        modal.style.display = "block";
-    }
+    closeBtn.onclick = closeModal;
 
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            closeModal();
         }
     }
 </script>
