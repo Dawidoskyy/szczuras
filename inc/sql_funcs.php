@@ -52,6 +52,32 @@
         return $rows;
     }
     
+
+    function fetchLastRecordByCondition($connection, $table, $conditionColumn = null, $conditionValue = null, $orderByColumn = 'id', $orderDirection = 'DESC', $limit = 1) {
+        $sql = "SELECT * FROM $table";
+        
+        $params = [];
+        if ($conditionColumn !== null && $conditionValue !== null) {
+            $sql .= " WHERE $conditionColumn = ?";
+            $params[] = $conditionValue;
+        }
+        
+        $sql .= " ORDER BY $orderByColumn $orderDirection LIMIT $limit";
+    
+        $stmt = $connection->prepare($sql);
+        if ($conditionColumn !== null && $conditionValue !== null) {
+            $stmt->bind_param("s", ...$params);
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    
+        $stmt->close();
+    
+        return $row;
+    }
+    
     
 
     function addNewRecord($connection, $table, $data) {
