@@ -4,7 +4,7 @@
         echo '
         <form action="./auth.php" method="post">
             <label for="login_key" style="float: left;">Enter key: <span style="color: red">*</span></label><br>
-            <input type="text" id="login_key" name="login_key" style="width: 90%;"><br><br>
+            <input type="text" id="login_key" autocomplete="off" name="login_key" style="width: 90%;"><br><br>
             <center><input type="submit" value="Submit" class="chujowyprzycisk"></center>
         </form>';
     }
@@ -30,7 +30,7 @@
     function show_user_info()
     {
         $subscription = "None";
-        $now = new DateTime();
+        $now = new DateTime(); // Current date and time
         if(isset($_SESSION['subscription']) && $_SESSION['subscription'] > $now->getTimestamp()) {
             $subscriptionEndDate = new DateTime();
             $subscriptionEndDate->setTimestamp($_SESSION['subscription']); 
