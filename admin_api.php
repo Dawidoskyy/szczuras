@@ -76,6 +76,20 @@
                 $_SESSION['error_style'] = 1;
                 $_SESSION['error_message'] = "Blacklist successfully removed!";
             }
+        } else if($_POST['action'] == "add_new_leak") {
+            $username =  $_POST['username'];
+            $IP =  $_POST['user_ip'];
+            $from =  $_POST['leak_from'];
+
+            $leakData = [
+                'nickname' => $username,
+                'ip' => $IP,
+                'fromwhere' => $from
+            ];
+            addNewRecord($conn, 'ipki', $leakData);
+
+            $_SESSION['error_style'] = 1;
+            $_SESSION['error_message'] = "Blacklist successfully added!";
         }
     }
     header('Location: admin.php');

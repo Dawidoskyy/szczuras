@@ -34,6 +34,7 @@
             <option value="addDays">Add Days to Key</option>
             <option value="addBlacklist">Blacklist username</option>
             <option value="removeBlacklist">Remove blacklist</option>
+            <option value="addNewLeak">Add new leak</option>
         </select>
     </div><br>
 
@@ -93,6 +94,23 @@
         </form>
     </div>
 
+    <!-- Add leak -->
+    <div id="userAdd" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Add new leak:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="add_new_leak">
+            <label for="username" style="float: left;">Username: <span style="color: red">*</span></label><br>
+            <input type="text" id="username" name="username" style="width: 90%;"><br><br>
+            <label for="user_ip" style="float: left;">IP: <span style="color: red">*</span></label><br>
+            <input type="text" id="user_ip" name="user_ip" style="width: 90%;"><br><br>
+            <label for="leak_from" style="float: left;">From: <span style="color: red">*</span></label><br>
+            <input type="text" id="leak_from" name="leak_from" style="width: 90%;"><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Execute</button>
+            </center>
+        </form>
+    </div>
+
     <a href="index.php" class="media"><i class="fa fa-arrow-left" aria-hidden="true"></i> Return back</a>
 
     <script>
@@ -102,12 +120,14 @@
             var addDaysForm = document.getElementById("addDaysForm");
             var blacklistUsername = document.getElementById("blacklistUsername");
             var blacklistRemove = document.getElementById("blacklistRemove");
+            var userAdd = document.getElementById("userAdd");
 
             // Hide both forms initially
             createKeyForm.classList.add("hidden");
             addDaysForm.classList.add("hidden");
             blacklistUsername.classList.add("hidden");
             blacklistRemove.classList.add("hidden");
+            userAdd.classList.add("hidden");
 
             // Show the selected form
             if (action === "createKey") {
@@ -118,6 +138,8 @@
                 blacklistUsername.classList.remove("hidden");
             } else if (action === "removeBlacklist") {
                 blacklistRemove.classList.remove("hidden");
+            } else if (action === "addNewLeak") {
+                userAdd.classList.remove("hidden");
             }
         }
     </script>
