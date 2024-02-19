@@ -35,6 +35,7 @@
             <option value="addBlacklist">Blacklist username</option>
             <option value="removeBlacklist">Remove blacklist</option>
             <option value="addNewLeak">Add new leak</option>
+            <option value="addNewMassLeak">Add new massive leak</option>
         </select>
     </div><br>
 
@@ -111,6 +112,22 @@
         </form>
     </div>
 
+    <!-- Add Mass Leaks -->
+    <div id="massLeakAdd" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Add Mass Leaks:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="add_mass_leaks">
+            <label for="mass_leaks" style="float: left;">Username / IP: <span style="color: red">*</span></label><br>
+            <textarea id="mass_leaks" name="mass_leaks" style="width: 90%;" rows="5"></textarea><br><br>
+            <label for="leak_from" style="float: left;">From: <span style="color: red">*</span></label><br>
+            <input type="text" id="leak_from" name="leak_from" style="width: 90%;"><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Execute</button>
+            </center>
+        </form>
+    </div>
+
+
     <a href="index.php" class="media"><i class="fa fa-arrow-left" aria-hidden="true"></i> Return back</a>
 
     <script>
@@ -121,6 +138,7 @@
             var blacklistUsername = document.getElementById("blacklistUsername");
             var blacklistRemove = document.getElementById("blacklistRemove");
             var userAdd = document.getElementById("userAdd");
+            var massLeakAdd = document.getElementById("massLeakAdd");
 
             // Hide both forms initially
             createKeyForm.classList.add("hidden");
@@ -128,6 +146,7 @@
             blacklistUsername.classList.add("hidden");
             blacklistRemove.classList.add("hidden");
             userAdd.classList.add("hidden");
+            massLeakAdd.classList.add("hidden");
 
             // Show the selected form
             if (action === "createKey") {
@@ -140,6 +159,8 @@
                 blacklistRemove.classList.remove("hidden");
             } else if (action === "addNewLeak") {
                 userAdd.classList.remove("hidden");
+            } else if (action === "addNewMassLeak") {
+                massLeakAdd.classList.remove("hidden");
             }
         }
     </script>

@@ -89,7 +89,36 @@
             addNewRecord($conn, 'ipki', $leakData);
 
             $_SESSION['error_style'] = 1;
-            $_SESSION['error_message'] = "Blacklist successfully added!";
+            $_SESSION['error_message'] = "New leak successfully added!";
+        } else if ($_POST['action'] == "add_mass_leaks") {
+            $leaks = explode("\n", $_POST['mass_leaks']);
+            $source = $_POST['leak_from'];
+            
+            $maxID = fetchMaxID($conn, 'ipki');
+        
+            foreach ($leaks as $leak) {
+                $leakData = explode(":", $leak);
+                if (count($leakData) == 2) {
+                    $username = trim($leakData[0]);
+                    $IP = trim($leakData[1]);
+        
+                    $maxID++;
+                    
+                    $leakData = [
+                        'id' => $maxID,
+                        'nickname' => $username,
+                        'ip' => $IP,
+                        'fromwhere' => $source
+                    ];
+                    addNewRecord($conn, 'ipki', $leakData);
+                } else {
+                    $_SESSION['error_style'] = 0;
+                    $_SESSION['error_message'] = "Invalid data format in line: $leak";
+                    break;
+                }
+            }
+            $_SESSION['error_style'] = 1;
+            $_SESSION['error_message'] = "Mass Leaks successfully added!";
         }
     }
     header('Location: admin.php');

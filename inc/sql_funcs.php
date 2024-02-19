@@ -29,7 +29,12 @@
         $statement->close();
     }
     
-
+    function fetchMaxID($conn, $tableName) {
+        $query = "SELECT MAX(id) AS max_id FROM $tableName";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        return $row['max_id'];
+    }
 
     function fetchRecords($connection, $table, $conditionColumn = null, $conditionValue = null) {
         $sql = "SELECT * FROM $table";
