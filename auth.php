@@ -1,14 +1,15 @@
 <?php
     session_start();
 
-    if($_SESSION['lastaction'] + 3 > time()) {
-        $_SESSION['error_style'] = 0;
-        $_SESSION['error_message'] = "Too many requests to api. Try again later.";
+    if(isset($_SESSION['authkey'])) {
         header('Location: index.php');
         exit();
     }
 
-    $_SESSION['lastaction'] = time();
+    $remember = false;
+    if(isset($_POST['remember']) && $_POST['remember'] == 'on') {
+        $remember = true;
+    }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_key'])) {
         $login_key = $_POST['login_key'];
@@ -26,7 +27,6 @@
             $row = $result->fetch_assoc();
 
             $_SESSION['authkey'] = $login_key;
-
             $_SESSION['username'] = $row['username'];
             $_SESSION['subscription'] = $row['subscription'];
             $_SESSION['lookups'] = $row['lookups'];
@@ -43,6 +43,10 @@
                 'date' => time()
             ];
             addNewRecord($conn, 'login_logs', $logsData);
+
+            if($remember) {
+                setcookie('auth_key_cookie', $login_key, time() + (86400 * 60), '/');
+            }
 
             header('Location: index.php');
             exit();

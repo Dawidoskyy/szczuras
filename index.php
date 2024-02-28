@@ -14,7 +14,7 @@
         <title>gicik.xyz</title>
         <link rel="icon" href="https://cdn.discordapp.com/attachments/1084181053687746620/1207078195694931979/LnBuZw.png?ex=65de562c&is=65cbe12c&hm=35597e7e27833b4e3c4db3bbab8493d411785354aafa424ef8e4a5adaf129ab4&" type="image/png">
     </head>
-    <body>
+    <body oncontextmenu="return false;">
         <h1 class="jebanelogo" onclick="window.location.href='index.php';" style="cursor: pointer;">gicik.xyz</h1><br><br><br>
 
         <?php display_error(); ?>
@@ -30,7 +30,6 @@
             
         </div>
         <br>
-        <!-- Cennik-->
         <div class="jebanybox">
             <?php
                 if (isset($_SESSION['authkey'])) {
@@ -43,7 +42,6 @@
 
         <a href="https://discord.gg/K7f8Yehy8n" class="media"><i class="fa-brands fa-discord"></i> Discord</a>
 
-        <!-- Pokazywanie okna modalnego -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -51,36 +49,42 @@
             </div>
         </div>
 
-        <!-- Pokazywanie wiadomosci do okna -->
         <?php if(isset($_SESSION['modal_message'])) { ?>
-            <script>var modal = document.getElementById("myModal");
-            modal.style.display = "block";</script>
+            <script>
+                var modal = document.getElementById("myModal");
+                modal.style.display = "block";
+            </script>
         <?php unset($_SESSION['modal_message']); } ?>
+
+        <script>
+            window.addEventListener('devtoolschange', event => {
+            document.body.innerHTML = "<center><h3>ogar mordko</h3></center>";
+            });
+
+            var modal = document.getElementById("myModal");
+            var closeBtn = document.querySelector(".modal-content .close");
+
+            function closeModal() {
+                var opacity = 1;
+                var timer = setInterval(function() {
+                    if(opacity <= 0) {
+                        clearInterval(timer);
+                        modal.style.display = "none";
+                    }
+                    modal.style.opacity = opacity;
+                    modal.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+                    opacity -= 0.1;
+                }, 50);
+            }
+
+            closeBtn.onclick = closeModal;
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+            
+        </script>
     </body>
 </html>
-
-<script>
-    var modal = document.getElementById("myModal");
-    var closeBtn = document.getElementsByClassName("close")[0];
-
-    function closeModal() {
-        var opacity = 1;
-        var timer = setInterval(function() {
-            if(opacity <= 0) {
-                clearInterval(timer);
-                modal.style.display = "none";
-            }
-            modal.style.opacity = opacity;
-            modal.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
-            opacity -= 0.1;
-        }, 50);
-    }
-
-    closeBtn.onclick = closeModal;
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModal();
-        }
-    }
-</script>
