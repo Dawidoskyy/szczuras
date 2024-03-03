@@ -6,9 +6,6 @@
             <label for="login_key" style="float: left;">Enter key: <span style="color: red">*</span></label><br>
             <input type="text" id="login_key" autocomplete="off" name="login_key" style="width: 90%;"><br><br>
             <center><input type="submit" value="Submit" class="chujowyprzycisk"></center><br>
-            <center><input type="checkbox" id="remember_me" name="remember_me" class="chujowycheckbox">
-            <label for="remember_me">Remember me</label> </center>
-
         </form>';
     }
 

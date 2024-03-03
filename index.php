@@ -74,7 +74,7 @@
                     modal.style.opacity = opacity;
                     modal.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
                     opacity -= 0.1;
-                }, 50);
+                }, 15);
             }
 
             closeBtn.onclick = closeModal;

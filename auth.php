@@ -6,11 +6,6 @@
         exit();
     }
 
-    $remember = false;
-    if(isset($_POST['remember']) && $_POST['remember'] == 'on') {
-        $remember = true;
-    }
-
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login_key'])) {
         $login_key = $_POST['login_key'];
 
@@ -44,9 +39,7 @@
             ];
             addNewRecord($conn, 'login_logs', $logsData);
 
-            if($remember) {
-                setcookie('auth_key_cookie', $login_key, time() + (86400 * 60), '/');
-            }
+            setcookie('auth_key_cookie', $login_key, time() + (86400 * 30), '/');
 
             header('Location: index.php');
             exit();
