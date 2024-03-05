@@ -150,7 +150,7 @@ select:focus {
     background: rgba(175, 175, 235);
 }
 
-input[type=text] {
+input[type=text], input[type=number] {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);

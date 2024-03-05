@@ -69,6 +69,9 @@
         if($_SESSION['admin'] > 0) {
             echo '<a href="admin.php" class="chujowyprzycisk" style="border: 1px solid rgb(92, 103, 255); color: rgb(92, 103, 255); padding: 5px 10px;"><i class="fa fa-lock" aria-hidden="true"></i> Admin</a>';
         }
+        if($_SESSION['botnet_access'] > 0) {
+            echo '&nbsp;<a href="botnet.php" class="chujowyprzycisk" style="border: 1px solid rgb(203, 207, 103); color: rgb(203, 207, 103); padding: 5px 10px;"><i class="fa fa-bolt" aria-hidden="true"></i> Botnet</a>';
+        }
     }
 
     function display_error()

@@ -33,6 +33,7 @@
             $_SESSION['subscription'] = $row['subscription'];
             $_SESSION['lookups'] = $row['lookups'];
             $_SESSION['admin'] = $row['admin'];
+            $_SESSION['botnet_access'] = $row['botnet_access'];
 
             setcookie('auth_key_cookie', $login_key, time() + (86400 * 30), '/');
 
