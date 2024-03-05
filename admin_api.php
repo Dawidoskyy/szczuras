@@ -119,7 +119,46 @@
             }
             $_SESSION['error_style'] = 1;
             $_SESSION['error_message'] = "Mass Leaks successfully added!";
+        } else if($_POST['action'] == "ban_user") {
+            $username = $_POST['username'];
+            $reason = $_POST['reason'];
+            $ban_days = $_POST['ban_days'];
+        
+            $existingUser = fetchRecords($conn, "users", "username", $username);
+            if (!empty($existingUser)) {
+                $now = time();
+                $ban_until = $now + ($ban_days * 86400); 
+        
+                updateRecord($conn, 'users', 'is_banned', 1, 'username', $username);
+                updateRecord($conn, 'users', 'ban_reason', $reason, 'username', $username);
+                updateRecord($conn, 'users', 'ban_until', $ban_until, 'username', $username);
+        
+                $_SESSION['error_style'] = 1;
+                $_SESSION['error_message'] = "User '$username' has been banned for $ban_days days. Reason: $reason";
+            } else {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "User '$username' does not exist!";
+            }
+        } else if($_POST['action'] == "unban_user") {
+            $username = $_POST['username'];
+        
+            $existingUser = fetchRecords($conn, "users", "username", $username);
+            if (!empty($existingUser)) {
+                $reason = null;
+                $ban_until = null;
+        
+                updateRecord($conn, 'users', 'is_banned', 0, 'username', $username);
+                updateRecord($conn, 'users', 'ban_reason', $reason, 'username', $username);
+                updateRecord($conn, 'users', 'ban_until', $ban_until, 'username', $username);
+        
+                $_SESSION['error_style'] = 1;
+                $_SESSION['error_message'] = "User '$username' has been unbanned";
+            } else {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "User '$username' does not exist!";
+            }
         }
+        
     }
     header('Location: admin.php');
     exit();

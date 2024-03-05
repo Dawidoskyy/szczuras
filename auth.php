@@ -21,23 +21,18 @@
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
 
+            if($row['is_banned'] == 1) {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "You are banned! Reason: ".$row['ban_reason']." Banned until: ".$row['ban_until'];
+                header('Location: index.php');
+                exit();
+            }
+
             $_SESSION['authkey'] = $login_key;
             $_SESSION['username'] = $row['username'];
             $_SESSION['subscription'] = $row['subscription'];
             $_SESSION['lookups'] = $row['lookups'];
             $_SESSION['admin'] = $row['admin'];
-
-            $_SESSION['error_style'] = 1;
-            $_SESSION['error_message'] = "Successfully logged in.";
-
-            // Logs
-            $logsData = [
-                'user' => $row['username'],
-                'authkey' => $login_key,
-                'IP' => $_SERVER['REMOTE_ADDR'],
-                'date' => time()
-            ];
-            addNewRecord($conn, 'login_logs', $logsData);
 
             setcookie('auth_key_cookie', $login_key, time() + (86400 * 30), '/');
 
@@ -46,9 +41,7 @@
         } else {
             $_SESSION['error_style'] = 0;
             $_SESSION['error_message'] = "Invalid key.";
-
             unset($_SESSION['authkey']);
-            
             header('Location: index.php');
             exit();
         }

@@ -36,6 +36,8 @@
             <option value="removeBlacklist">Remove blacklist</option>
             <option value="addNewLeak">Add new leak</option>
             <option value="addNewMassLeak">Add new massive leak</option>
+            <option value="banUsers">Ban user</option>
+            <option value="unbanUsers">Unban user</option>
         </select>
     </div><br>
 
@@ -127,6 +129,34 @@
         </form>
     </div>
 
+    <!-- Ban User Form -->
+    <div id="banUser" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Ban User:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="ban_user">
+            <label for="username" style="float: left;">Username: <span style="color: red">*</span></label><br>
+            <input type="text" id="username" name="username" style="width: 90%;"><br><br>
+            <label for="reason" style="float: left;">Reason: <span style="color: red">*</span></label><br>
+            <input type="text" id="reason" name="reason" style="width: 90%;"><br><br>
+            <label for="ban_days" style="float: left;">Ban Length: <span style="color: red">*</span></label><br>
+            <input type="text" id="ban_days" name="ban_days" style="width: 90%;" placeholder=""><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Ban User</button>
+            </center>
+        </form>
+    </div>
+    <div id="unbanUser" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Ban User:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="unban_user">
+            <label for="username" style="float: left;">Username: <span style="color: red">*</span></label><br>
+            <input type="text" id="username" name="username" style="width: 90%;"><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Unban User</button>
+            </center>
+        </form>
+    </div>
+
 
     <a href="index.php" class="media"><i class="fa fa-arrow-left" aria-hidden="true"></i> Return back</a>
 
@@ -139,6 +169,8 @@
             var blacklistRemove = document.getElementById("blacklistRemove");
             var userAdd = document.getElementById("userAdd");
             var massLeakAdd = document.getElementById("massLeakAdd");
+            var banUser = document.getElementById("banUser");
+            var unbanUser = document.getElementById("unbanUser");
 
             // Hide both forms initially
             createKeyForm.classList.add("hidden");
@@ -147,6 +179,8 @@
             blacklistRemove.classList.add("hidden");
             userAdd.classList.add("hidden");
             massLeakAdd.classList.add("hidden");
+            banUser.classList.add("hidden");
+            unbanUser.classList.add("hidden");
 
             // Show the selected form
             if (action === "createKey") {
@@ -161,6 +195,10 @@
                 userAdd.classList.remove("hidden");
             } else if (action === "addNewMassLeak") {
                 massLeakAdd.classList.remove("hidden");
+            } else if (action === "banUsers") {
+                banUser.classList.remove("hidden");
+            } else if (action === "unbanUsers") {
+                unbanUser.classList.remove("hidden");
             }
         }
     </script>
