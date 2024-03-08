@@ -34,6 +34,8 @@
             <option value="addDays">Add Days to Key</option>
             <option value="addBlacklist">Blacklist username</option>
             <option value="removeBlacklist">Remove blacklist</option>
+            <option value="addBlacklistBotnet">[botnet] Blacklist Target</option>
+            <option value="removeBlacklistBotnet">[botnet] Remove blacklist</option>
             <option value="addNewLeak">Add new leak</option>
             <option value="addNewMassLeak">Add new massive leak</option>
             <option value="banUsers">Ban user</option>
@@ -91,6 +93,32 @@
             <input type="hidden" name="action" value="remove_blacklist">
             <label for="username" style="float: left;">Username: <span style="color: red">*</span></label><br>
             <input type="text" id="username" name="username" style="width: 90%;"><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Execute</button>
+            </center>
+        </form>
+    </div>
+
+    <!-- Botnet Blacklist username -->
+    <div id="blacklistTarget" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Blacklist target:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="blacklist_target">
+            <label for="target" style="float: left;">Target: <span style="color: red">*</span></label><br>
+            <input type="text" id="target" name="target" style="width: 90%;"><br><br>
+            <center>
+                <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Execute</button>
+            </center>
+        </form>
+    </div>
+
+    <!-- Botnet Remove Blacklist -->
+    <div id="blacklistTargetRemove" class="jebanybox hidden">
+        <center><h3 style="color: rgb(255, 255, 255, 0.7);">Remove target blacklist:</h3></center>
+        <form action="./admin_api.php" method="post">
+            <input type="hidden" name="action" value="remove_target">
+            <label for="target" style="float: left;">Target: <span style="color: red">*</span></label><br>
+            <input type="text" id="target" name="target" style="width: 90%;"><br><br>
             <center>
                 <button type="submit" class="chujowyprzycisk"><i class="fa fa-plus" aria-hidden="true"></i> Execute</button>
             </center>
@@ -167,6 +195,8 @@
             var addDaysForm = document.getElementById("addDaysForm");
             var blacklistUsername = document.getElementById("blacklistUsername");
             var blacklistRemove = document.getElementById("blacklistRemove");
+            var blacklistTarget = document.getElementById("blacklistTarget");
+            var blacklistTargetRemove = document.getElementById("blacklistTargetRemove");
             var userAdd = document.getElementById("userAdd");
             var massLeakAdd = document.getElementById("massLeakAdd");
             var banUser = document.getElementById("banUser");
@@ -177,6 +207,8 @@
             addDaysForm.classList.add("hidden");
             blacklistUsername.classList.add("hidden");
             blacklistRemove.classList.add("hidden");
+            blacklistTarget.classList.add("hidden");
+            blacklistTargetRemove.classList.add("hidden");
             userAdd.classList.add("hidden");
             massLeakAdd.classList.add("hidden");
             banUser.classList.add("hidden");
@@ -191,6 +223,10 @@
                 blacklistUsername.classList.remove("hidden");
             } else if (action === "removeBlacklist") {
                 blacklistRemove.classList.remove("hidden");
+            } else if (action === "addBlacklistBotnet") {
+                blacklistTarget.classList.remove("hidden");
+            } else if (action === "removeBlacklistBotnet") {
+                blacklistTargetRemove.classList.remove("hidden");
             } else if (action === "addNewLeak") {
                 userAdd.classList.remove("hidden");
             } else if (action === "addNewMassLeak") {

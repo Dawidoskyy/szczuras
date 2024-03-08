@@ -28,6 +28,7 @@
                 exit();
             }
 
+            // Store user data to session
             $_SESSION['authkey'] = $login_key;
             $_SESSION['username'] = $row['username'];
             $_SESSION['subscription'] = $row['subscription'];
@@ -36,6 +37,18 @@
             $_SESSION['botnet_access'] = $row['botnet_access'];
 
             setcookie('auth_key_cookie', $login_key, time() + (86400 * 30), '/');
+
+            // Logs
+            $logsData = [
+                'user' => $row['username'],
+                'authkey' => $login_key,
+                'IP' => $_SERVER['REMOTE_ADDR'],
+                'date' => time()
+            ];
+            addNewRecord($conn, 'login_logs', $logsData);
+
+            $_SESSION['error_style'] = 1;
+            $_SESSION['error_message'] = "Successfully logged in.";
 
             header('Location: index.php');
             exit();

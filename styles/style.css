@@ -133,7 +133,7 @@ select {
     border: 1px solid rgb(175, 175, 235);
     border-radius: 5px;
     animation: boxshadow_anim1 4s infinite;
-    padding: 20px; 
+    padding: 10px; 
     color: white; 
     min-width: 400px;
     max-width: 800px;
