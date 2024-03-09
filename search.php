@@ -11,6 +11,14 @@ if ($_SESSION['lastaction'] + 3 > time()) {
     exit();
 }
 
+function search_api_error($message, $search)
+{
+    $_SESSION['error_style'] = 0;
+    $_SESSION['error_message'] = $message;
+    header('Location: index.php');
+    exit;
+}
+
 $_SESSION['lastaction'] = time();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
@@ -27,20 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
     // Sprawdza kurwa blackliste
     $blacklistedUsers = fetchRecords($conn, "blacklist", "name", $search_key);
     if (!empty($blacklistedUsers)) {
-        $_SESSION['error_style'] = 0;
-        $_SESSION['error_message'] = "User is blacklisted.";
-        header('Location: index.php');
-        exit();
+        search_api_error("User is blacklisted.", $search_key);
     }
 
     $mojang_api_url = "https://api.mojang.com/users/profiles/minecraft/" . $search_key;
     $mojang_response = file_get_contents($mojang_api_url);
 
     if ($mojang_response === false) {
-        $_SESSION['error_style'] = 0;
-        $_SESSION['error_message'] = "Error retrieving data from API #1.";
-        header('Location: index.php');
-        exit();
+        search_api_error("Error retrieving data from API #1.", $search_key);
     }
 
     $mojang_data = json_decode($mojang_response, true);
@@ -51,10 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
         $labymod_response = file_get_contents($labymod_api_url);
 
         if ($labymod_response === false) {
-            $_SESSION['error_style'] = 0;
-            $_SESSION['error_message'] = "Error retrieving data from API #2.";
-            header('Location: index.php');
-            exit();
+            search_api_error("Error retrieving data from API #2.", $search_key);
         }
 
         $labymod_data = json_decode($labymod_response, true);
@@ -107,26 +106,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_user'])) {
                 $logsData = [
                     'user' => $_SESSION['username'],
                     'value' => $search_key,
-                    'date' => time(),
                     'status' => 1
                 ];
                 addNewRecord($conn, 'search_logs', $logsData);
             } else {
-                $_SESSION['error_style'] = 0;
-                $_SESSION['error_message'] = "User not found!";
-                unset($_SESSION['search_user']);
+                search_api_error("User not found!", $search_key);
             }
         } else {
-            $_SESSION['error_style'] = 0;
-            $_SESSION['error_message'] = "No username history found for this user.";
-            header('Location: index.php');
-            exit();
+            search_api_error("No username history found for this user.", $search_key);
         }
     } else {
-        $_SESSION['error_style'] = 0;
-        $_SESSION['error_message'] = "No user found with this username.";
-        header('Location: index.php');
-        exit();
+        search_api_error("No user found with this username.", $search_key);
     }
 
     header('Location: index.php');

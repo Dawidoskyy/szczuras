@@ -86,5 +86,58 @@
             }
             
         </script>
+
+        <br>
+        <?php if($_SESSION['admin'] >= 1) { ?>
+            <!-- Chat -->
+            <div class="jebanybox">
+                <div id="chat">
+                    
+                </div>
+
+                <form id="messageForm" action="chat/sendMessage.php" method="post">
+                    <input type="text" name="message" id="message" placeholder="Message" style='width: 280px;' required>
+                    <button type="submit" class="chujowyprzycisk" style="padding: 8px 12px;"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                </form>
+            </div>
+        <?php } ?>
     </body>
 </html>
+
+<script>
+        function fetchMessages(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("chat").innerHTML = this.responseText;
+                    scrollChatToBottom();
+                }
+            };
+            xhttp.open("GET", "getMessages.php", true);
+            xhttp.send();
+        }
+
+        function scrollChatToBottom(){
+            var chatDiv = document.getElementById('chat');
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            fetchMessages();
+            setInterval(fetchMessages, 5000);
+        });
+
+        document.getElementById("messageForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("message").value = "";
+                    fetchMessages();
+                }
+            };
+            xhttp.open("POST", "sendMessage.php", true);
+            xhttp.send(formData);
+        });
+    </script>

@@ -42,8 +42,7 @@
             $logsData = [
                 'user' => $row['username'],
                 'authkey' => $login_key,
-                'IP' => $_SERVER['REMOTE_ADDR'],
-                'date' => time()
+                'IP' => $_SERVER["HTTP_CF_CONNECTING_IP"] // $_SERVER['REMOTE_ADDR']
             ];
             addNewRecord($conn, 'login_logs', $logsData);
 

